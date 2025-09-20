@@ -70,43 +70,27 @@
     transition: background 0.2s, color 0.2s;
   }
 
-  /* Responsive untuk tablet */
+  /* Tablet */
   @media (max-width: 900px) {
     .container {
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 15px;
     }
-    .card h3 {
-      font-size: 16px;
-    }
-    .btn {
-      font-size: 13px;
-      padding: 6px 10px;
-    }
-    .details .mini-card {
-      font-size: 13px;
-      padding: 5px 8px;
-    }
+    .card h3 { font-size: 16px; }
+    .btn { font-size: 13px; padding: 6px 10px; }
+    .details .mini-card { font-size: 13px; padding: 5px 8px; }
   }
 
-  /* Responsive untuk smartphone */
+  /* Smartphone Portrait */
   @media (max-width: 600px) {
     .container {
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: 1fr; /* 1 kolum penuh */
+      gap: 12px;
     }
-    .card {
-      padding: 15px;
-    }
-    .card h3 {
-      font-size: 14px;
-    }
-    .btn {
-      font-size: 12px;
-      padding: 5px 8px;
-    }
-    .details .mini-card {
-      font-size: 12px;
-      padding: 4px 6px;
-    }
+    .card { padding: 15px; }
+    .card h3 { font-size: 14px; }
+    .btn { font-size: 12px; padding: 5px 8px; }
+    .details .mini-card { font-size: 12px; padding: 4px 6px; }
   }
 </style>
 </head>
