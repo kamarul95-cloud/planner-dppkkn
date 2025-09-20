@@ -3,163 +3,201 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Planner Dashboard</title>
+<title>Dashboard Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
   body {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5;
     margin: 0;
     padding: 20px;
-    background: #e8f5e9;
   }
-  h2 {
+
+  h1 {
     text-align: center;
-    margin-bottom: 10px;
-    color: #1b5e20;
+    margin-bottom: 20px;
+    color: #333;
   }
-  .card-container {
+
+  .container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
   }
+
   .card {
-    background: linear-gradient(160deg, #a8e6cf, #dcedc1, #81c784);
-    border-radius: 14px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    padding: 12px;
-    border-top: 4px solid #2e7d32;
-    transition: transform 0.2s, box-shadow 0.3s;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    position: relative;
     color: black;
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
   }
+
   .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    transform: translateY(-5px);
   }
+
   .card h3 {
-    margin: 0 0 4px;
-    font-size: 16px;
+    margin: 0 0 10px;
+    font-size: 18px;
     color: black;
   }
-  .toggle-btn {
-    margin-top: 8px;
-    padding: 6px 10px;
-    background: #43a047;
-    color: #fff;
+
+  .btn {
+    background-color: #fff;
+    color: #333;
     border: none;
+    padding: 8px 12px;
     border-radius: 6px;
     cursor: pointer;
-    font-weight: bold;
-    font-size: 12px;
-    transition: background 0.3s;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.2s;
   }
-  .toggle-btn:hover {
-    background: #2e7d32;
+
+  .btn:hover {
+    background-color: #333;
+    color: #fff;
   }
+
   .details {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.5s ease;
+    transition: max-height 0.3s ease;
     margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
-  .details.open {
-    max-height: 600px;
-  }
+
   .details .mini-card {
-    margin-bottom: 6px;
-    padding: 6px 10px;
     border-radius: 8px;
-    background: #fff;
-    color: #333;
+    padding: 8px 12px;
+    font-size: 14px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     border-left: 4px solid #4CAF50;
+    color: #fff;
+    background-color: #4CAF50;
   }
 
   /* Tablet */
   @media (max-width: 900px) {
+    .container {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 15px;
+    }
     .card h3 { font-size: 16px; }
-    .toggle-btn { font-size: 13px; padding: 6px 10px; }
+    .btn { font-size: 13px; padding: 6px 10px; }
     .details .mini-card { font-size: 13px; padding: 5px 8px; }
   }
 
-  /* Smartphone Portrait */
+  /* Smartphone portrait view tiru Tabung Korban */
   @media (max-width: 600px) {
-    .card-container {
+    .container {
       display: flex;
       flex-direction: column;
       gap: 15px;
+      padding: 10px;
     }
     .card {
       width: 100%;
       padding: 18px;
       font-size: 16px;
     }
-    .card h3 { font-size: 16px; }
-    .toggle-btn { font-size: 14px; padding: 8px 12px; }
-    .details .mini-card { font-size: 14px; padding: 6px 8px; }
+    .card h3 { font-size: 16px; margin-bottom: 8px; }
+    .btn { font-size: 14px; padding: 8px 12px; }
+    .details .mini-card { font-size: 14px; padding: 6px 10px; }
   }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
 
-<h2>Planner Dashboard</h2>
-
-<div class="card-container" id="dashboard"></div>
+<h1>Dashboard Planner</h1>
+<div class="container" id="dashboard"></div>
 
 <script>
-  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSWH0u-1B4ZLiNIDKaxwWAaOl-8jCgyPpBOgERtbAJJNmAEcl2V4ZjqZgyyc5gsQDujrtQQl4qWFKxW/pub?gid=1833420589&single=true&output=csv";
+const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSWH0u-1B4ZLiNIDKaxwWAaOl-8jCgyPpBOgERtbAJJNmAEcl2V4ZjqZgyyc5gsQDujrtQQl4qWFKxW/pub?gid=1833420589&single=true&output=csv';
 
-  const rutin = [
-    "Ziarah AJK",
-    "Usrah Pemuda",
-    "Kelas Fardhu Ain dan Al-Quran",
-    "Kuliah Dana DPPKKN",
-    "Amal Bersama Masyarakat",
-    "Skuad Amar",
-    "Daurah Kitab"
-  ];
+const rutin = [
+  "Ziarah AJK",
+  "Usrah Pemuda",
+  "Kelas Fardhu Ain dan Al-Quran",
+  "Kuliah Dana DPPKKN",
+  "Amal Bersama Masyarakat",
+  "Skuad Amar",
+  "Daurah Kitab"
+];
 
-  fetch(csvUrl)
-    .then(res => res.text())
-    .then(csvText => {
-      Papa.parse(csvText, {
-        skipEmptyLines: true,
-        complete: function(results) {
-          const rows = results.data;
-          const monthRowIndex = 1;
-          const months = rows[monthRowIndex].map(b => b.trim()).filter(b => b);
-          const plannerData = {};
-          months.forEach((month, colIndex) => {
-            plannerData[month] = [];
-            for (let r = monthRowIndex + 1; r < rows.length; r++) {
-              const value = rows[r][colIndex]?.trim();
-              if (value) plannerData[month].push(value);
+fetch(csvUrl)
+  .then(res => res.text())
+  .then(csvText => {
+    Papa.parse(csvText, {
+      skipEmptyLines: true,
+      complete: function(results) {
+        const rows = results.data;
+        const monthRowIndex = 1;
+        const months = rows[monthRowIndex].map(b => b.trim()).filter(b => b);
+
+        const plannerData = {};
+        months.forEach((month, colIndex) => {
+          plannerData[month] = [];
+          for (let r = monthRowIndex + 1; r < rows.length; r++) {
+            const value = rows[r][colIndex]?.trim();
+            if (value) plannerData[month].push(value);
+          }
+        });
+
+        const dashboard = document.getElementById('dashboard');
+        const gradients = [
+          'linear-gradient(135deg, #a8edea, #fed6e3)',
+          'linear-gradient(135deg, #f6d365, #fda085)',
+          'linear-gradient(135deg, #84fab0, #8fd3f4)',
+          'linear-gradient(135deg, #fccb90, #d57eeb)',
+          'linear-gradient(135deg, #e0c3fc, #8ec5fc)',
+          'linear-gradient(135deg, #f093fb, #f5576c)'
+        ];
+
+        let i = 0;
+        for (const bulan in plannerData) {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.background = gradients[i % gradients.length];
+
+          card.innerHTML = `
+            <h3>${bulan}</h3>
+            <button class="btn">Lihat Butiran</button>
+            <div class="details">
+              ${plannerData[bulan].map(a => `
+                <div class="mini-card" style="
+                  background-color: ${rutin.includes(a) ? '#4CAF50' : '#fff'};
+                  color: ${rutin.includes(a) ? '#fff' : '#333'};
+                  border-left: ${rutin.includes(a) ? '4px solid #4CAF50' : '4px solid transparent'};
+                ">
+                  ${a}
+                </div>
+              `).join('')}
+            </div>
+          `;
+          dashboard.appendChild(card);
+
+          const btn = card.querySelector('.btn');
+          const details = card.querySelector('.details');
+          btn.addEventListener('click', () => {
+            if (details.style.maxHeight) {
+              details.style.maxHeight = null;
+            } else {
+              details.style.maxHeight = details.scrollHeight + "px";
             }
           });
 
-          const dashboard = document.getElementById("dashboard");
-          Object.keys(plannerData).forEach((bulan, i) => {
-            const card = document.createElement("div");
-            card.className = "card";
-            card.innerHTML = `
-              <h3>${bulan}</h3>
-              <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('open')">Lihat Butiran</button>
-              <div class="details">
-                ${plannerData[bulan].map(a => `
-                  <div class="mini-card" style="
-                    background-color: ${rutin.includes(a) ? '#4CAF50' : '#fff'};
-                    color: ${rutin.includes(a) ? '#fff' : '#333'};
-                    border-left: ${rutin.includes(a) ? '4px solid #4CAF50' : '4px solid transparent'};
-                  ">
-                    ${a}
-                  </div>
-                `).join('')}
-              </div>
-            `;
-            dashboard.appendChild(card);
-          });
+          i++;
         }
-      });
+      }
     });
+  });
 </script>
 
 </body>
